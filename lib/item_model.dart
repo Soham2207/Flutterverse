@@ -1,15 +1,19 @@
+import 'package:flutter/cupertino.dart';
+
 class Item {
   final String name;
   final String unit;
-  final int price;
+  final String price;
   final String image;
-  int quantity;
-
+  ValueNotifier<int>? quantity;
   Item(
       {required this.name,
       required this.unit,
       required this.price,
-      required this.image,required this.quantity});
+      required this.image,
+      this.quantity}) {
+    quantity = ValueNotifier<int>(1);
+  }
 
   Map toJson() {
     return {

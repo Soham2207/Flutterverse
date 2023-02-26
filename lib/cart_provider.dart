@@ -13,6 +13,8 @@ class CartProvider with ChangeNotifier {
 
   List<Item> cart = [];
 
+  // List<Item> get cart => cart;
+
   void addCounter() {
     _counter++;
     notifyListeners();
@@ -29,16 +31,16 @@ class CartProvider with ChangeNotifier {
 
   void addQuantity(String name) {
     final index = cart.indexWhere((element) => element.name == name);
-    cart[index].quantity += 1;
+    cart[index].quantity!.value += 1;
     notifyListeners();
   }
 
   void removeQuantity(String name) {
     final index = cart.indexWhere((element) => element.name == name);
-    if (cart[index].quantity == 1) {
-      cart[index].quantity = 1;
+    if (cart[index].quantity!.value == 1) {
+      cart[index].quantity!.value = 1;
     } else {
-      cart[index].quantity -= 1;
+      cart[index].quantity!.value -= 1;
     }
     notifyListeners();
   }
@@ -66,5 +68,14 @@ class CartProvider with ChangeNotifier {
   void addItem(Item item) {
     cart.add(item);
     notifyListeners();
+  }
+
+  List<Item> getCart() {
+    return cart;
+  }
+
+  ValueNotifier<int> getQuantity(String name) {
+    final index = cart.indexWhere((element) => element.name == name);
+    return cart[index].quantity!;
   }
 }

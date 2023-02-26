@@ -1,5 +1,10 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterverse/cart_provider.dart';
+import 'package:flutterverse/cart_screen.dart';
 import 'package:flutterverse/constants.dart';
+import 'package:flutterverse/item_model.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -47,6 +52,29 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: R.webBlue,
         title: Text("Shopping Items"),
+        actions: [
+          Badge(
+            badgeContent:
+                Consumer<CartProvider>(builder: (context, value, child) {
+              return Text(
+                value.getCounter().toString(),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              );
+            }),
+            position: BadgePosition.bottomStart(start: 30, bottom: 30),
+            child: Container(
+                margin: EdgeInsets.only(right: 10),
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CartScreen()));
+                    },
+                    icon: Icon(Icons.shopping_cart))),
+          )
+        ],
       ),
       body: SafeArea(
           child: ListView.builder(
@@ -64,6 +92,7 @@ class ItemWidget extends StatelessWidget {
   String image, name, price;
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<CartProvider>(context);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
@@ -85,7 +114,12 @@ class ItemWidget extends StatelessWidget {
             ],
           ),
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+                cart.addCounter();
+                Item newItem =
+                    Item(name: name, unit: 'Kg', price: price, image: image);
+                cart.addItem(newItem);
+              },
               style: TextButton.styleFrom(backgroundColor: Colors.black),
               child: Container(
                   height: 20,
